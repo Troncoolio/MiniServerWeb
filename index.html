@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Control ESP32</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+        }
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .boton {
+            display: inline-block;
+            width: 150px;
+            height: 60px;
+            margin: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .boton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .boton:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .btn-on {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-on:hover {
+            background-color: #45a049;
+        }
+        .btn-off {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-off:hover {
+            background-color: #da190b;
+        }
+        .info {
+            margin-top: 25px;
+            font-size: 18px;
+            color: #666;
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            word-break: break-all;
+        }
+        .estado {
+            font-size: 20px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .estado-encendido {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .estado-apagado {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Control ESP32</h1>
+        
+        <div class="estado %ESTADO_CLASS%" id="estadoDiv">
+            Estado: <span id="estadoTexto">%ESTADO_TEXTO%</span>
+        </div>
+        
+        <button class="boton btn-on" onclick="encenderLED()">ENCENDER</button>
+        <button class="boton btn-off" onclick="apagarLED()">APAGAR</button>
+        
+        <div class="info">
+            <p><strong>IP del ESP32:</strong> %IP_ESP32%</p>
+            <p><span id="ultimoComando">%ULTIMO_COMANDO%</span></p>
+            <p><em>Monitor Serial para más información</em></p>
+        </div>
+    </div>
+    
+    <script>
+        function encenderLED() {
+            actualizarEstado('on');
+            fetch('/on');
+        }
+        
+        function apagarLED() {
+            actualizarEstado('off');
+            fetch('/off');
+        }
+        
+        function actualizarEstado(comando) {
+            var estadoDiv = document.getElementById('estadoDiv');
+            var estadoTexto = document.getElementById('estadoTexto');
+            var ultimoComando = document.getElementById('ultimoComando');
+            
+            if (comando === 'on') {
+                estadoDiv.className = 'estado estado-encendido';
+                estadoTexto.innerHTML = 'ENCENDIDO';
+                ultimoComando.innerHTML = 'ENCENDER';
+            } else {
+                estadoDiv.className = 'estado estado-apagado';
+                estadoTexto.innerHTML = 'APAGADO';
+                ultimoComando.innerHTML = 'APAGAR';
+            }
+        }
+    </script>
+</body>
+</html>
